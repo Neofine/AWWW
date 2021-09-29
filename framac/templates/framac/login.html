@@ -1,0 +1,21 @@
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<div class="col-top menu top-menu">
+</div>
+<div class="col-top menu top-menu">
+</div>
+<div class="col-top menu top-menu">
+</div>
+<div class="col-top menu top-menu">
+</div>
+
+<h1 class="main-text"> {{ error }} </h1>
+
+
+<form action="/login/" method="post" class="center">
+  {% csrf_token %}
+  {{ form|linebreaks }}
+  <input type="submit" id="submit" value="Submit">
+</form>

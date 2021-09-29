@@ -1,0 +1,59 @@
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'framac/darkMode.js' %}"></script>
+<script>
+
+   function upload(event) {
+        event.preventDefault();
+        var data = new FormData($('form').get(0));
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $("#main").load("addedFile", function() {});
+            }
+        });
+        return false;
+   }
+
+    $(function() {
+        $('form').submit(upload);
+    });
+
+    $(function() {
+      $("#menu").click(function(e) {
+          e.preventDefault();
+          $("#all").load(this.href, function() {});
+      });
+  });
+</script>
+
+<div id="all">
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <form action="/add/" method="post" enctype="multipart/form-data" class="center" id="formaddf">
+        {% csrf_token %}
+        {{ form|linebreaks }}
+        <button type="submit" id="submit" class="btn-submit">Submit</button>
+    </form>
+
+    <div class="menu left-menu">
+        <ul>
+            <li><a id="menu" href="{% url 'index' %}">Go back</a></li>
+        </ul>
+    </div>
+</div>

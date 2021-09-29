@@ -1,0 +1,50 @@
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'framac/darkMode.js' %}"></script>
+<script>
+    $(function() {
+        $("#formaddd").submit(function(event) {
+            event.preventDefault();
+            var friendForm = $(this);
+            var posting = $.post( friendForm.attr('action'), friendForm.serialize() );
+            posting.done(function(data) {
+                $("#main").load("addedDir", function() {});
+            });
+        });
+    });
+
+    $(function() {
+      $("#menu").click(function(e) {
+          e.preventDefault();
+          $("#all").load(this.href, function() {});
+      });
+  });
+</script>
+
+<div id="all">
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    {{ error }}
+    <p id="errorJS"></p>
+
+    <form action="/addD/" method="post" class="center" id="formaddd">
+        {% csrf_token %}
+        {{ form|linebreaks }}
+        <input type="submit" id="submit" value="Submit">
+    </form>
+
+    <div class="menu left-menu">
+        <ul>
+            <li><a id="menu" href="{% url 'index' %}">Go back</a></li>
+        </ul>
+    </div>
+</div>

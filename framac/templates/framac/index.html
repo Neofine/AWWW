@@ -1,0 +1,178 @@
+{% load static %}
+
+
+<script src='/static/codemirror-5.61.1/lib/codemirror.js'></script>
+<link rel="stylesheet"
+      href="/static/codemirror-5.61.1/lib/codemirror.css">
+</link>
+<script src='/static/codemirror-5.61.1/mode/clike/clike.js'></script>
+<link rel="stylesheet" href='/static/codemirror-5.61.1/theme/monokai.css'>
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'framac/darkMode.js' %}"></script>
+
+<script>
+    function hide_segment(obj) {
+        var seg = document.getElementById("G" + obj.name);
+        var to_show = document.getElementById("H" + obj.name);
+        if ($(obj).is(":checked")) {
+            obj.classList.remove(seg.classList[0]);
+            seg.classList.remove("hidden");
+            to_show.style.visibility = "hidden";
+        } else {
+            to_show.style.visibility = "visible";
+            obj.classList.add(seg.classList[0]);
+            seg.classList.add("hidden");
+        }
+    }
+
+    $(function () {
+        $("#addFile").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $("#addDir").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $("#delete").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $("#provers").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $("#vcs").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $("#result").click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $('a[id^="my"]').click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $('#rerun').click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $('#logout').click(function (e) {
+            e.preventDefault();
+            $("#main").load(this.href, function () {
+            });
+        });
+        $('#color').click(function (e) {
+            e.preventDefault();
+        });
+    });
+
+    $(function () {
+        $("#prover_tab").submit(function (event) {
+            event.preventDefault();
+            var friendForm = $(this);
+            var posting = $.post(friendForm.attr('action'), friendForm.serialize());
+            posting.done(function (data) {
+                $("#prov_data").text("Submit saved!");
+            });
+        });
+    });
+
+    var editor = CodeMirror(document.querySelector('#codemirror'), {
+        lineNumbers: true,
+        readOnly: true,
+        tabSize: 2,
+        value: "{{highlighted|safe}}",
+        mode: 'text/x-csrc',
+        theme: 'monokai'
+    });
+
+</script>
+
+<div id="main">
+
+    <div class="col-top menu top-menu">
+        <ul>
+            <li><a id="addFile" href="{% url 'addFile' %}">Add file</a></li>
+            <li><a id="addDir" href="{% url 'addDirectory' %}">Add directory</a></li>
+            <li><a id="delete" href="{% url 'delete' %}">Delete file or directory</a></li>
+            <li><a id="color" href="color" onclick="changeColors()">Change Color Theme</a></li>
+            <li><a id="rerun" href="{% url 'rerun' %}">Rerun verification</a></li>
+            <li><a id="logout" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="col-left menu left-menu" id="file_sel">
+        <h1 class="main-text"> File selection dialog: </h1>
+        {% autoescape off %}
+        {{file_selection}}
+        {% endautoescape %}
+    </div>
+
+
+    <div class="col-code code">
+        <div id="codemirror" style="height: 100%; width: 100%">
+
+        </div>
+        <!--  &lt;!&ndash;    <textarea spellcheck="false" class="code-text">&ndash;&gt;-->
+        <!--    {% autoescape off %}-->
+        <!--      <div class="code-text">{{highlighted}}</div>-->
+        <!--    {% endautoescape %}-->
+        <!--  &lt;!&ndash;    </textarea>&ndash;&gt;-->
+    </div>
+
+    <div class="col-right prog-elements" id="fope">
+    <pre>
+      {% autoescape off %}
+        {{ focus_on_elems }}
+      {% endautoescape %}
+    </pre>
+    </div>
+
+    <div class="col-tab menu bot-menu">
+        <ul>
+            <li><a id="provers" href="{% url 'provers' %}">PROVERS</a></li>
+            <li><a id="vcs" href="{% url 'verification' %}">VCs</a></li>
+            <li><a id="result" href="{% url 'result' %}">RESULT</a></li>
+        </ul>
+    </div>
+
+    <div class="col-tab-content tabs-data">
+        {% autoescape off %}
+        {% if prover_tab %}
+        <b id="prov_data"></b>
+        <form action="/{{ prover_tab }}" method="post" id="prover_tab">
+            {% csrf_token %}
+            {{tab_content}}
+
+            {% if prover_tab == 'provers' or prover_tab == 'verification'%}
+            <input type="submit" id="submitP" value="Submit">
+            {% endif %}
+        </form>
+
+        {% else %}
+        <p> ↑ Click on tabs to preview available compilation options! ↑ </p>
+        {% endif %}
+
+        {{ tab_info }}
+        {% endautoescape %}
+    </div>
+
+    {% if current_file %}
+    <div class="showing-file">
+        <p>Currenty showing file:</p>
+        {{current_file}}
+    </div>
+    {% endif %}
+</div>

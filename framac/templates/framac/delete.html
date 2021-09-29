@@ -1,0 +1,47 @@
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'framac/darkMode.js' %}"></script>
+<script>
+    $(function() {
+        $("#formdel").submit(function(event) {
+            event.preventDefault();
+            var friendForm = $(this);
+            var posting = $.post( friendForm.attr('action'), friendForm.serialize() );
+            posting.done(function(data) {
+                $("#main").load("deleteDone", function() {});
+            });
+        });
+    });
+    $(function() {
+      $("#menu").click(function(e) {
+          e.preventDefault();
+          $("#all").load(this.href, function() {});
+      });
+  });
+</script>
+
+<div id="all">
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <div class="col-top menu top-menu">
+    </div>
+    <form action="/delete/" method="post" class="center" id="formdel">
+        <b class="center">Select what you want to delete:</b><br>
+        {% csrf_token %}
+        {{ form}}
+        <input type="submit" id="submit" value="Delete it!">
+    </form>
+
+    <div class="menu left-menu">
+        <ul>
+            <li><a id="menu" href="{% url 'index' %}">Go back</a></li>
+        </ul>
+    </div>
+</div>

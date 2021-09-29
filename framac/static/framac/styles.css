@@ -1,0 +1,527 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/*
+  Klasa korzeń, znajdują się tu zmienne dla kolorów
+*/
+:root {
+  --main: #dac393;
+  --button: #d44b27;
+  --button-hover: #aead8a;
+  --button-border: #e98f47;
+  --even-button: #d7ebcc;
+  --odd-button: #f5d4af;
+  --text: #1f4228;
+  --right-bar: #e98f47;
+  --tab: white;
+  --tab-hover: #aead8a;
+  --current-page: #4caf50;
+  --current-hover: #68f370;
+  --code-background: white;
+  --code-text: black;
+}
+
+/*
+  Klasa body jest stosowana na całej stronie
+*/
+html, body {
+  margin: 0;
+  height: 100%;
+  min-width: 300px;
+  color: var(--text);
+  background-color: var(--main);
+}
+
+/*
+  Klasy dla ustawienia poszczególnych elementów na stronie
+*/
+.col-left {width: 20%; height: 95%}
+.col-top {width: 100%; height: 5%; min-height: 46px; max-height: 60px}
+.col-code {width: 60%; height: 70%; overflow: auto}
+.col-right {width: 20%; height: 70%; overflow-y: auto}
+.col-tab {width: 80%; height: 3%; min-height: 30px; max-height: 75px}
+.col-tab-content {width: 80%; height: 22%; overflow: auto}
+
+/*
+  Elementy mają przylegać do lewej
+*/
+[class*="col-"] {
+  float: left;
+}
+
+/*
+  Jeżeli szerokość poniżej 768px to włącza się tryb komórkowy
+*/
+@media only screen and (max-width: 768px) {
+  [class*="col-"] {
+    width: 100%;
+  }
+  [class*="col-left"] {
+    height: 460px;
+  }
+  [class*="col-top"] {
+    height: 135px;
+    max-height: 135px;
+  }
+  [class*="col-code"] {
+    height: 500px;
+  }
+  [class*="col-right"] {
+    height: 300px;
+  }
+  [class*="col-tab"] {
+    height: 73px;
+  }
+  [class*="col-tab-content"] {
+    height: 300px;
+  }
+}
+
+/*
+  Jeżeli szerokość powyżej 1280px to jest więcej miejsca na kod,
+  kosztem lewej i prawej strony
+*/
+@media only screen and (min-width: 1280px) {
+  [class*="col-left"] {
+    width: 15%;
+  }
+  [class*="col-code"] {
+    width: 65%;
+  }
+  [class*="col-right"] {
+    width: 20%;
+  }
+  [class*="col-tab"] {
+    width: 85%;
+  }
+  [class*="col-tab-content"] {
+    width: 85%;
+  }
+}
+
+/*
+  Klasa nadrzędna dla reszty menu, wszystkie elementy
+  posiadające menu posiadają również jakieś jego dziecko
+*/
+.menu {
+  background-color: var(--main);
+  border: 2px solid var(--main);
+}
+
+.menu ul {
+  margin: 0;
+  overflow: hidden;
+}
+
+.menu li {
+  display: grid;
+  padding: 1%;
+  margin-bottom: 3%;
+  background-color: var(--button);
+  text-align: center;
+}
+
+.menu li a {
+  text-align: center;
+  color: var(--text);
+  padding: 1.5%;
+  text-decoration: none;
+}
+
+.menu li.active {
+  background-color: var(--current-page);
+}
+
+.menu li.active:hover {
+  background-color: var(--current-hover);
+}
+
+.menu li:hover:not(.active) {
+  background-color: var(--button-hover);
+}
+
+/*
+  Dziecko menu, lewe menu, czyli dla plików
+*/
+.left-menu ul {
+  margin: 4%;
+}
+
+.left-menu li {
+  padding: 1.5%;
+  margin-bottom: 1%;
+}
+
+.left-menu li a {
+  padding: 0;
+  text-align: left;
+}
+
+.left-menu li.active {
+  background-color: var(--current-page);
+}
+
+.left-menu li.directory {
+  background-color: var(--odd-button);
+}
+
+.left-menu li.file {
+  background-color: var(--even-button);
+}
+
+.full-path {
+  visibility: hidden;
+  width: 19.6%;
+  height: 4%;
+  background-color: black;
+  font-size: 20px;
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: fixed;
+  top: 5px;
+  right: 5px;
+
+  transition-property: visibility;
+  transition-delay:0.7s;
+}
+
+
+
+.left-menu li:hover .full-path{
+  visibility: visible;
+}
+
+/*
+  Dziecko menu, górne menu, czyli główne
+*/
+.top-menu li {
+  border: 3px solid var(--button-border);
+  margin-left: 0.15%;
+  margin-right: 0.15%;
+  font-size: 17px;
+  font-weight: bold;
+  width: 12%;
+  padding: 0.05%;
+  float: left;
+  border-radius: 25px;
+  height: 45px;
+}
+
+/*
+  Jeżeli jest tryb komórkowy to przyciski
+  górnego menu znajdują się pod sobą
+*/
+@media (max-width: 768px) {
+  .top-menu li {
+    float: none;
+    width: 100%;
+    margin-bottom: 5px;
+    height: 40px;
+  }
+}
+
+/*
+  Dziecko menu, dolne menu, czyli dla tabów
+*/
+.bot-menu li {
+  padding: 0;
+  float: left;
+  background-color: var(--main);
+  border-bottom: 30px solid var(--tab);
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  height: 27px;
+  width: 145px;
+}
+
+.bot-menu li.active {
+  background-color: var(--main);
+  border-bottom: 30px solid var(--current-page);
+}
+
+.bot-menu li.active:hover {
+  background-color: var(--main);
+  border-bottom: 30px solid var(--current-hover);
+}
+
+.bot-menu li:hover:not(.active) {
+  background-color: var(--main);
+  border-bottom: 30px solid var(--tab-hover);
+}
+
+/*
+  Klasa dla tekstu nad lewym menu
+*/
+.main-text {
+  background-color: var(--button);
+  padding: 5px;
+  text-align: center;
+}
+
+.func-text {
+  font-size: 25px;
+  color: #9a05ce;
+  text-align: center;
+}
+
+/*
+  Klasa dla ramki okalającej kod
+*/
+.code {
+  background-color: var(--button);
+  border: 2px solid var(--main);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+/*
+  Klasa dla kodu, używana dla textarea
+*/
+.code-text {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-size: 17px;
+
+  font-family: "Ubuntu Mono",serif;
+  background-color: var(--code-background);
+  color: var(--code-text);
+  overflow: auto;
+  white-space: pre;
+}
+
+/*
+  Klasa dla segmentu opisującego elementy programu,
+  czyli po prawej od kodu
+*/
+.prog-elements {
+  background-color: var(--right-bar);
+  border: 2px solid var(--main);
+  border-radius: 10px;
+}
+
+/*
+  Klasa dla segmentu kryjącego się pod tabami dolnego menu
+*/
+.tabs-data {
+  background-color: var(--right-bar);
+  border: 2px solid var(--main);
+  border-top: 0;
+}
+
+.code-number {
+  visibility: hidden;
+  width: 19.6%;
+  height: 4%;
+  background-color: black;
+  font-size: 15px;
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+.interrupted {
+  background-color: #668dc9;
+}
+
+.interrupted:hover {
+  background-color: #729de2;
+}
+
+.interrupted:hover .code-number{
+  visibility: visible;
+}
+
+.unknown {
+  background-color: #af2bad;
+}
+
+.unknown:hover {
+  background-color: #c932c7;
+}
+
+.unknown:hover .code-number{
+  visibility: visible;
+}
+
+.failed {
+  background-color: #ba2222;
+}
+
+.failed:hover {
+  background-color: #d52626;
+}
+
+.failed:hover .code-number{
+  visibility: visible;
+}
+
+.valid {
+  background-color: #4a9c4a;
+}
+
+.valid:hover {
+  background-color: #59c159;
+}
+
+.valid:hover .code-number{
+  visibility: visible;
+}
+
+.warning {
+  background-color: #d9a02a;
+}
+
+.warning:hover {
+  background-color: #e8aa2d;
+}
+
+.warning:hover .code-number{
+  visibility: visible;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+.no-copy {
+  background-color: #dedede;
+  border-right: 2px solid var(--button);
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+}
+
+.section {
+  background-color: #4a9c4a;
+}
+
+.center {
+  text-align: center;
+  font-size: 25px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.center input[type=text]{
+  border: 3px solid #e8a493;
+  border-radius: 4px;
+  height: 5%;
+}
+
+.make-smaller {
+  text-align: center;
+}
+
+.showing-file {
+  width: 14.5%;
+  height: 5%;
+  background-color: #494141;
+  font-size: 15px;
+  opacity: 0.8;
+  color: #b5d75b;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+
+.hidden {
+  visibility: hidden;
+  height: 0;
+}
+
+.interruptedH {
+  visibility: hidden;
+  background-color: #668dc9;
+}
+
+.interruptedH:hover {
+  background-color: #729de2;
+}
+
+.interruptedH:hover .code-number{
+  visibility: visible;
+}
+
+.unknownH {
+  visibility: hidden;
+  background-color: #af2bad;
+}
+
+.unknownH:hover {
+  background-color: #c932c7;
+}
+
+.unknownHhover .code-number{
+  visibility: visible;
+}
+
+.failedH {
+  visibility: hidden;
+  background-color: #ba2222;
+}
+
+.failedH:hover {
+  background-color: #d52626;
+}
+
+.failedH:hover .code-number{
+  visibility: visible;
+}
+
+.validH {
+  visibility: hidden;
+  background-color: #4a9c4a;
+}
+
+.validH:hover {
+  background-color: #59c159;
+}
+
+.validH:hover .code-number{
+  visibility: visible;
+}
+
+.warningH {
+  visibility: hidden;
+  background-color: #d9a02a;
+}
+
+.warningH:hover {
+  background-color: #e8aa2d;
+}
+
+.warningH:hover .code-number{
+  visibility: visible;
+}
+
+.comment {
+  color: cadetblue;
+}
+
+.codemirror {
+  height: 100%;
+  width: 100%;
+}

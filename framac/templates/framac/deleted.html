@@ -1,0 +1,31 @@
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'framac/styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'framac/darkMode.js' %}"></script>
+<script>
+  $(function() {
+      $("#delete").click(function(e) {
+          e.preventDefault();
+          $("#all").load(this.href, function() {});
+      });
+  });
+    $(function() {
+      $("#menu").click(function(e) {
+          e.preventDefault();
+          $("#all").load(this.href, function() {});
+      });
+  });
+</script>
+
+<div id="all">
+    <b>You have successfully perform deletion!</b>
+
+    <div class="menu left-menu">
+        <ul>
+        <li><a id="delete" href="{% url 'delete' %}">Delete another one</a></li>
+        <li><a id="menu" href="{% url 'index' %}">Go back</a></li>
+        </ul>
+    </div>
+</div>
